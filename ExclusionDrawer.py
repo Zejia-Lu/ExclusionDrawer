@@ -10,6 +10,7 @@ class ExclusionDrawer:
     # Constant
     alpha = 1. / 137
     me = 0.511e-3 # in GeV
+    mmu = 0.10566 # in GeV
     NA = 6.02e23
     mp = 0.938
     mup = 2.79

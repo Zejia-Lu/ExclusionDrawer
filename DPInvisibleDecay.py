@@ -70,16 +70,16 @@ class DPInvisibleDecay(ExclusionDrawer):
     def GetXS(self, mA, epsilon):
         def GetdXS_dx_at_point(x):
             return self.GetdXS_dx(x, mA, epsilon)
-        XS, error = quad(GetdXS_dx_at_point, 0, 1)
+        XS, error = quad(GetdXS_dx_at_point, mA/self.E0, 1)
         return XS
 
     # Get acceptance of signal at each point
-    def GetSignalAcceptance(self, mA, epsilon):
+    def GetSignalEfficiency(self, mA, epsilon):
         return 0.5
 
     # Calculate signal yield from XS and beam/target information
     def GetSignalYield(self, mA, epsilon):
-        return self.GetSignalAcceptance(mA, epsilon) * self.GetXS(mA, epsilon) * self.thickness * self.EOT * self.NA / self.A * 1e-36
+        return self.GetSignalEfficiency(mA, epsilon) * self.GetXS(mA, epsilon) * self.thickness * self.EOT * self.NA / self.A * 1e-36
     
     # Get background yield for each point
     def GetBkgYield(self, mA, epsilon):
