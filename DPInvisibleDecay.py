@@ -11,11 +11,17 @@ class DPInvisibleDecay(ExclusionDrawer):
     def __init__(self, EOT, Ee, verbose=0):
         super().__init__(EOT, Ee, verbose)
 
+        self.bkg = 0.015
+
         self.mAs = np.array([1., 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 500, 700, 1000], dtype='double')
         self.mAs *= 1e-3
         self.epsilons = []
         for lg10epsilon in np.arange(-7, -1, 0.5):
             self.epsilons.append(10. ** lg10epsilon)
+    
+    # Set background yield
+    def SetBkgYield(self, bkg):
+        self.bkg = bkg
 
     def SetmAs(self, mAs):
         self.mAs = mAs
@@ -81,14 +87,10 @@ class DPInvisibleDecay(ExclusionDrawer):
     def GetSignalYield(self, mA, epsilon):
         return self.GetSignalEfficiency(mA, epsilon) * self.GetXS(mA, epsilon) * self.thickness * self.EOT * self.NA / self.A * 1e-36
     
-    # Get background yield for each point
-    def GetBkgYield(self, mA, epsilon):
-        return 0.015
-    
     # Get significance Z0 from Asimov's formula
     def GetSignificance(self, mA, epsilon):
         s = self.GetSignalYield(mA, epsilon)
-        b = self.GetBkgYield(mA, epsilon)
+        b = self.bkg
         Z2 = 2 * ((s + b) * log(1 + s / b) - s)
         if (Z2 > 0):
             Z = Z2 ** 0.5

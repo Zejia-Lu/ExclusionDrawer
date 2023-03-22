@@ -8,6 +8,7 @@ class DPVisibleDecay(DPInvisibleDecay):
     def __init__(self, EOT, Ee, verbose=0):
         super().__init__(EOT, Ee, verbose)
 
+        self.bkg = 10
         self.detect_range = [1, 18] # in cm
 
     # Get decay length in cm
@@ -35,7 +36,3 @@ class DPVisibleDecay(DPInvisibleDecay):
     # Get acceptance of signal at each point
     def GetSignalEfficiency(self, mA, epsilon):
         return 0.4
-
-    # Get background yield for each point
-    def GetBkgYield(self, mA, epsilon):
-        return 5
