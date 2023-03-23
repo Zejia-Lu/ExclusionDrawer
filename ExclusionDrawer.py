@@ -22,6 +22,16 @@ class ExclusionDrawer:
         self.E0 = E0
         self.verbose = verbose
 
+    # Set method
+    def SetEOT(self, EOT):
+        self.EOT = EOT
+    
+    def SetE0(self, E0):
+        self.E0 = E0
+    
+    def SetVerbose(self, verbose):
+        self.verbose = verbose
+
     def GetXS(self):
         pass
 

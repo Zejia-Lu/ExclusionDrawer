@@ -11,6 +11,10 @@ class DPVisibleDecay(DPInvisibleDecay):
         self.bkg = 10
         self.detect_range = [1, 18] # in cm
 
+    # Set detect range (in cm)
+    def SetDetectRange(self, detect_range):
+        self.detect_range = detect_range
+
     # Get decay length in cm
     def GetDecayLength(self, EA, mA, epsilon):
         alpha = self.alpha
