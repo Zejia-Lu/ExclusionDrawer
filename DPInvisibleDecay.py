@@ -102,6 +102,18 @@ class DPInvisibleDecay(ExclusionDrawer):
         
         return Z
 
+    # Calculate signal yield for each point, just for cross check
+    def GetYieldGrid(self):
+        X, Y = np.meshgrid(self.mAs, self.epsilons)
+        Z = X + Y
+        for i in range(len(X)):
+            for j in range(len(X[0])):
+                Z[i][j] = self.GetSignalYield(X[i][j], Y[i][j])
+
+        X = np.log10(X)
+        Y = np.log10(Y)
+        return X, Y, Z
+
     # Calculate confidence level for each point
     def GetGrid(self):
         X, Y = np.meshgrid(self.mAs, self.epsilons)
