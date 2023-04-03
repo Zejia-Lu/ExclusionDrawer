@@ -8,16 +8,13 @@ import matplotlib.pyplot as plt
 class DPInvisibleDecay(ExclusionDrawer):
     'Calculate yield of invisible decay of dark photon, draw the exclusion region'
 
-    def __init__(self, EOT, Ee, verbose=0):
-        super().__init__(EOT, Ee, verbose)
+    def __init__(self, EOT, E0, thickness_in_X0=0.1, verbose=0):
+        super().__init__(EOT, E0, thickness_in_X0, verbose)
 
         self.bkg = 0.015
 
-        self.mAs = np.array([1., 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 500, 700, 1000], dtype='double')
-        self.mAs *= 1e-3
-        self.epsilons = []
-        for lg10epsilon in np.arange(-7, -1, 0.5):
-            self.epsilons.append(10. ** lg10epsilon)
+        self.mAs = np.array([1., 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 500, 700, 1000], dtype='double') * 1e-3
+        self.epsilons = 10 ** np.arange(-7, -1, 0.5)
     
     # Set background yield
     def SetBkgYield(self, bkg):
@@ -85,7 +82,7 @@ class DPInvisibleDecay(ExclusionDrawer):
 
     # Calculate signal yield from XS and beam/target information
     def GetSignalYield(self, mA, epsilon):
-        return self.GetSignalEfficiency(mA, epsilon) * self.GetXS(mA, epsilon) * self.thickness * self.EOT * self.NA / self.A * 1e-36
+        return self.GetSignalEfficiency(mA, epsilon) * self.GetXS(mA, epsilon) * self.thickness * self.EOT * self.NA / self.A * 1e-36 
     
     # Get significance Z0 from Asimov's formula
     def GetSignificance(self, mA, epsilon):
@@ -109,6 +106,8 @@ class DPInvisibleDecay(ExclusionDrawer):
         for i in range(len(X)):
             for j in range(len(X[0])):
                 Z[i][j] = self.GetSignalYield(X[i][j], Y[i][j])
+                if (self.verbose > 0):
+                    print('{:0} {:1} {:2}'.format(X[i][j], Y[i][j], Z[i][j]))
 
         X = np.log10(X)
         Y = np.log10(Y)

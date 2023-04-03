@@ -5,7 +5,7 @@ class ExclusionDrawer:
     Z = 74
     A = 184
     X0 = 6.76 # in g/cm^2
-    thickness = X0 * 0.1 # thickness of target in g/cm^2
+    rho = 19.35 # in g/cm^3
     
     # Constant
     alpha = 1. / 137
@@ -17,10 +17,11 @@ class ExclusionDrawer:
     cm = 5.0677e13 # in GeV^-1
     toPB = 1e36 / cm**2 # from GeV^-2 to pb
 
-    def __init__(self, EOT, E0, verbose=0):
+    def __init__(self, EOT, E0, thickness_in_X0=0.1, verbose=0):
         self.EOT = EOT
         self.E0 = E0
         self.verbose = verbose
+        self.thickness = self.X0 * thickness_in_X0
 
     # Set method
     def SetEOT(self, EOT):
