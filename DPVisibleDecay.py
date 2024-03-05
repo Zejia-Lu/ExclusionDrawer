@@ -8,8 +8,12 @@ class DPVisibleDecay(DPInvisibleDecay):
     def __init__(self, EOT, E0, thickness_in_X0=0.1, verbose=0):
         super().__init__(EOT, E0, thickness_in_X0, verbose)
 
+        self.signal_efficiency = 0.4
         self.bkg = 10
         self.detect_range = [1, 17] # in cm
+
+    def SetSignalEfficiency(self, signal_efficiency):
+        self.signal_efficiency = signal_efficiency
 
     # Set detect range, 0 point is front end of target (in cm)
     def SetDetectRange(self, detect_range):
@@ -51,7 +55,7 @@ class DPVisibleDecay(DPInvisibleDecay):
 
     # Get acceptance of signal at each point
     def GetSignalEfficiency(self, mA, epsilon):
-        return 0.4
+        return self.signal_efficiency
 
     # For cross check with paper
     # def GetDecayLength(self, EA, mA, epsilon):
