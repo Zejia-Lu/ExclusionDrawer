@@ -41,8 +41,8 @@ def DrawLimit(tag, label, color):
 # DrawLimit(tag="minRange0p1_eff60", label="detect range [0.1, 17] cm", color='m')
 # DrawLimit(tag="minRange1_eff60", label="detect range [1, 17] cm", color='b')
 # DrawLimit(tag="minRange5_eff60", label="detect range [5, 17] cm", color='g')
-DrawLimit(tag="minRange1_eff30", label=r"30% signal efficiency", color='r')
-DrawLimit(tag="minRange1_eff60", label=r"60% signal efficiency", color='b')
+DrawLimit(tag="4GeV_minRange1_eff60", label=r"4 GeV", color='r')
+DrawLimit(tag="8GeV_minRange1_eff60", label=r"8 GeV", color='b')
 
 ######################
 # Plot Configuration #

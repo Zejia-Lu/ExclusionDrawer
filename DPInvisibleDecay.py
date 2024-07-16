@@ -57,9 +57,34 @@ class DPInvisibleDecay(ExclusionDrawer):
 
         def dChi_dt(t):
             return (t - t_min) / t**2 * (G2_el(t) + G2_in(t))
+            # return (t - t_min) / t**2 * G2_el(t)
         
         Chi, error = quad(dChi_dt, t_min, t_max)
         return Chi
+    
+    def GetdChi_dt(self, t, mA):
+        Z = DPInvisibleDecay.Z
+        mp = DPInvisibleDecay.mp
+        mup = DPInvisibleDecay.mup
+        E0 = self.E0
+        a_el = self.a_el
+        a_in = self.a_in
+        d = self.d
+
+        def G2_el(t):
+            return (a_el**2 * t / (1 + a_el**2 * t))**2 * (1 / (1 + t / d))**2 * Z**2
+        
+        def G2_in(t):
+            return (a_in**2 * t / (1 + a_in**2 * t))**2 * ((1 + t / 4 / mp**2 * (mup**2 - 1)) / (1 + t / 0.71)**4)**2 * Z
+        
+        t_min = (mA**2 / 2 / E0)**2
+        t_max = mA**2
+
+        def dChi_dt(t):
+            return (t - t_min) / t**2 * (G2_el(t) + G2_in(t))
+            # return (t - t_min) / t**2 * G2_el(t)
+        
+        return dChi_dt(t)
 
     # Calculate differential cross section in pb according to (A14) in [arXiv:0906.0580]
     def GetdXS_dx(self, x, mA, epsilon):
@@ -68,13 +93,25 @@ class DPInvisibleDecay(ExclusionDrawer):
         E0 = self.E0
 
         return 4 * alpha**3 * epsilon**2 * self.GetChi(mA) * (1 - mA**2 / E0**2)**0.5 * (1 - x + 1/3 * x**2) / (mA**2 * (1 - x) / x + me**2 * x) * self.toPB
-    
+
     # Calculate total cross section by integrate over differential cross section
     def GetXS(self, mA, epsilon):
         def GetdXS_dx_at_point(x):
             return self.GetdXS_dx(x, mA, epsilon)
-        XS, error = quad(GetdXS_dx_at_point, mA/self.E0, 1)
+        XS, error = quad(GetdXS_dx_at_point, mA/self.E0, 1 - mA/self.E0)
+        # print(f"{mA = }, {XS = }, {error = }")
         return XS
+    
+    # Calculate total cross section by formula according to (A15) in [arXiv:0906.0580]
+    def GetXS_formula(self, mA, epsilon):
+        alpha = DPInvisibleDecay.alpha
+        me = DPInvisibleDecay.me
+        E0 = self.E0
+
+        beta = (1 - mA**2 / E0**2)**0.5
+        critical = max(me**2 / mA**2, mA**2 / E0**2)
+
+        return 4. / 3. * alpha**3 * epsilon**2 * beta / mA**2 * self.GetChi(mA) * np.log10(1 / critical) * self.toPB
 
     # Get acceptance of signal at each point
     def GetSignalEfficiency(self, mA, epsilon):
